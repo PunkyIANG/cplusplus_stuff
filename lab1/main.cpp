@@ -29,13 +29,13 @@ int main()
     while (continueLoop)
     {
         cout << endl;
-        cout << (char) _Stop << ") Oprire program" << endl;
-        cout << (char) _EditAll << ") Input tren" << endl;
-        cout << (char) _PrintAll << ") Afisare tren" << endl;
-        cout << (char) _SortByPassengers << ") Sort trenuri dupa pasageri" << endl;
-        cout << (char) _PrintAbovePrice << ") Afisare trenuri cu pret > x" << endl;
-        cout << (char) _AddNewElement << ") Adauga tren pe pos x" << endl;
-        cout << (char) _RemoveElemWithDestination << ") Sterge trenurile" << endl;
+        cout << (char)_Stop << ") Oprire program" << endl;
+        cout << (char)_EditAll << ") Input tren" << endl;
+        cout << (char)_PrintAll << ") Afisare tren" << endl;
+        cout << (char)_SortByPassengers << ") Sort trenuri dupa pasageri" << endl;
+        cout << (char)_PrintAbovePrice << ") Afisare trenuri cu pret > x" << endl;
+        cout << (char)_AddNewElement << ") Adauga tren pe pos x" << endl;
+        cout << (char)_RemoveElemWithDestination << ") Sterge trenurile" << endl;
         cout << "Optiunea: ";
 
         char option = '0';
@@ -100,4 +100,3 @@ int main()
 
     return 0;
 }
-

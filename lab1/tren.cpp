@@ -1,31 +1,33 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
+
 class Tren
 {
 private:
     int nr_pasageri;
     int pretul_biletului;
-    std::string destinatia;
-    std::string ora_plecarii;
+    string destinatia;
+    string ora_plecarii;
 
 
-    void EditIfNotNull(std::string *data)
+    void EditIfNotNull(string *data)
     {
-        std::string temp;
-        std::getline(std::cin, temp); //folosim getline in loc de cin ca sa putem primi un string gol ca input (basically null)
+        string temp;
+        getline(cin, temp); //folosim getline in loc de cin ca sa putem primi un string gol ca input (basically null)
 
         if (temp != "")
         { //daca stringul temp este gol, atunci valoarea initiala nu se schimba
             *data = temp;
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 
     void EditIfNotNull(int *data)
     {
-        std::string temp;
-        std::getline(std::cin, temp);
+        string temp;
+        getline(cin, temp);
 
         if (temp != "")
         {
@@ -33,17 +35,17 @@ private:
             {
                 *data = stoi(temp); //convertim in int
             }
-            catch (std::invalid_argument const &e)
+            catch (invalid_argument const &e)
             {
-                std::cout << "Bad input: std::invalid_argument thrown" << '\n'; //erori in caz de input incorect
+                cout << "Bad input: std::invalid_argument thrown" << '\n'; //erori in caz de input incorect
             }
-            catch (std::out_of_range const &e)
+            catch (out_of_range const &e)
             {
-                std::cout << "Integer overflow: std::out_of_range thrown" << '\n'; //valoarea initiala nu este afectata in caz de eroare
+                cout << "Integer overflow: std::out_of_range thrown" << '\n'; //valoarea initiala nu este afectata in caz de eroare
             }
         }
 
-        std::cout << std::endl;
+        cout << endl;
     }
 
 public:
@@ -55,7 +57,7 @@ public:
         pretul_biletului = -1;
     }
 
-    Tren(std::string _destinatia, std::string _ora_plecarii, int _nr_pasageri, int _pretul_biletului)
+    Tren(string _destinatia, string _ora_plecarii, int _nr_pasageri, int _pretul_biletului)
     {
         destinatia = _destinatia;
         ora_plecarii = _ora_plecarii;
@@ -65,31 +67,31 @@ public:
 
     ~Tren()
     {
-        std::cout << "Tren cu dest " << destinatia << " cu ora plec. " << ora_plecarii << " a fost sters" << endl;
+        cout << "Tren cu dest " << destinatia << " cu ora plec. " << ora_plecarii << " a fost sters" << endl;
     }
 
     void Editare()
     {
-        std::cout << "Transmiteti un string gol ca sa nu schimbati valoarea curenta" << std::endl;
+        cout << "Transmiteti un string gol ca sa nu schimbati valoarea curenta" << endl;
 
-        std::cout << "Dati destinatia noua (prev: " << destinatia << "): ";
+        cout << "Dati destinatia noua (prev: " << destinatia << "): ";
         EditIfNotNull(&destinatia);
 
-        std::cout << "Dati ora plecarii noua (prev: " << ora_plecarii << "): ";
+        cout << "Dati ora plecarii noua (prev: " << ora_plecarii << "): ";
         EditIfNotNull(&ora_plecarii);
 
-        std::cout << "Dati nr nou de pasageri (prev: " << nr_pasageri << "): ";
+        cout << "Dati nr nou de pasageri (prev: " << nr_pasageri << "): ";
         EditIfNotNull(&nr_pasageri);
 
-        std::cout << "Dati pretul nou a biletului (prev: " << pretul_biletului << "): ";
+        cout << "Dati pretul nou a biletului (prev: " << pretul_biletului << "): ";
         EditIfNotNull(&pretul_biletului);
     }
 
     void Afisare()
     {
-        std::cout << "Trenul spre " << destinatia << " porneste la ora " << ora_plecarii
-                  << " cu " << nr_pasageri << " pasageri. Un bilet costa " << pretul_biletului << " lei." << std::endl
-                  << std::endl;
+        cout << "Trenul spre " << destinatia << " porneste la ora " << ora_plecarii
+                  << " cu " << nr_pasageri << " pasageri. Un bilet costa " << pretul_biletului << " lei." << endl
+                  << endl;
     }
 
     int GetPret()

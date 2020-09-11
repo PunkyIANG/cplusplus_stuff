@@ -5,7 +5,7 @@ using namespace std;
 
 string dummy;
 
-void EditAll(Tren elemente[], int n)
+void EditAll(Tren *elemente, int n)
 {
     for (int i = 0; i < n; i++)
     {
@@ -13,7 +13,7 @@ void EditAll(Tren elemente[], int n)
     }
 }
 
-void PrintAll(Tren elemente[], int n)
+void PrintAll(Tren *elemente, int n)
 {
     for (int i = 0; i < n; i++)
     {
@@ -21,7 +21,7 @@ void PrintAll(Tren elemente[], int n)
     }
 }
 
-void SortByPassengers(Tren elemente[], int n)
+void SortByPassengers(Tren *elemente, int n)
 {
     for (int i = 0; i < n - 1; i++)
         for (int j = i + 1; j < n; j++)
@@ -33,7 +33,7 @@ void SortByPassengers(Tren elemente[], int n)
             }
 }
 
-void PrintAbovePrice(Tren elemente[], int n)
+void PrintAbovePrice(Tren *elemente, int n)
 {
     int pretMinim;
     cout << "Dati pretul minim: ";
@@ -49,7 +49,7 @@ void PrintAbovePrice(Tren elemente[], int n)
     }
 }
 
-Tren* AddNewElement(Tren elemente[], int &n)
+Tren* AddNewElement(Tren *elemente, int &n)
 {
     int pos;
     cout << "Dati pozitia elem nou: ";
@@ -80,7 +80,7 @@ Tren* AddNewElement(Tren elemente[], int &n)
     return temp;
 }
 
-void RemoveElemWithDestination(Tren elemente[], int &n)
+void RemoveElemWithDestination(Tren *elemente, int &n)
 {
     string target;
     cout << "Dati destinatia de stergere: ";

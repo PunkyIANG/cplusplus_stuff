@@ -5,7 +5,7 @@ using namespace std;
 
 string dummy;
 
-void EditAll(Tren *elemente, int n)
+void EditAll(Tren elemente[], int n)
 {
     for (int i = 0; i < n; i++)
     {
@@ -13,7 +13,7 @@ void EditAll(Tren *elemente, int n)
     }
 }
 
-void PrintAll(Tren *elemente, int n)
+void PrintAll(Tren elemente[], int n)
 {
     for (int i = 0; i < n; i++)
     {
@@ -21,7 +21,7 @@ void PrintAll(Tren *elemente, int n)
     }
 }
 
-void SortByPassengers(Tren *elemente, int n)
+void SortByPassengers(Tren elemente[], int n)
 {
     for (int i = 0; i < n - 1; i++)
         for (int j = i + 1; j < n; j++)
@@ -33,7 +33,7 @@ void SortByPassengers(Tren *elemente, int n)
             }
 }
 
-void PrintAbovePrice(Tren *elemente, int n)
+void PrintAbovePrice(Tren elemente[], int n)
 {
     int pretMinim;
     cout << "Dati pretul minim: ";
@@ -49,15 +49,15 @@ void PrintAbovePrice(Tren *elemente, int n)
     }
 }
 
-void AddNewElement(Tren *elemente, int *n)
+void AddNewElement(Tren elemente[], int &n)
 {
     int pos;
     cout << "Dati pozitia elem nou: ";
     cin >> pos;
     getline(cin, dummy);
-    Tren *temp = new Tren[*n + 1];
+    Tren *temp = new Tren[n + 1];
     
-    for (int i = 0; i <= *n; i++)
+    for (int i = 0; i <= n; i++)
     {
         if (i < pos)
         {
@@ -74,14 +74,14 @@ void AddNewElement(Tren *elemente, int *n)
         }
     }
 
-    *n++;
+    n++;
 
 
     delete[] elemente;
     elemente = temp;
 }
 
-void RemoveElemWithDestination(Tren *elemente, int *n)
+void RemoveElemWithDestination(Tren elemente[], int &n)
 {
     string target;
     cout << "Dati destinatia de stergere: ";
@@ -89,15 +89,15 @@ void RemoveElemWithDestination(Tren *elemente, int *n)
     getline(cin, dummy);
     int count = 0;
 
-    for (int i = 0; i < *n; i++)
+    for (int i = 0; i < n; i++)
     {
         if (elemente[i].GetDestination() == target)
         {
-            for (int j = i; j < *n - 1; j++)
+            for (int j = i; j < n - 1; j++)
             {
                 elemente[j] = elemente[j + 1];
             }
-            *n--;
+            n--;
             count++;
         }
     }

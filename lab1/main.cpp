@@ -84,13 +84,13 @@ int main()
 
         case _AddNewElement:
         {
-            AddNewElement(elemente, &n);
+            AddNewElement(elemente, n);
             break;
         }
 
         case _RemoveElemWithDestination:
         {
-            RemoveElemWithDestination(elemente, &n);
+            RemoveElemWithDestination(elemente, n);
             break;
         }
 

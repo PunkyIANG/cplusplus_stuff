@@ -4,10 +4,11 @@
 class Tren
 {
 private:
-    std::string destinatia;
-    std::string ora_plecarii;
     int nr_pasageri;
     int pretul_biletului;
+    std::string destinatia;
+    std::string ora_plecarii;
+
 
     void EditIfNotNull(std::string *data)
     {
@@ -60,6 +61,11 @@ public:
         ora_plecarii = _ora_plecarii;
         nr_pasageri = _nr_pasageri;
         pretul_biletului = _pretul_biletului;
+    }
+
+    ~Tren()
+    {
+        std::cout << "Tren cu dest " << destinatia << " cu ora plec. " << ora_plecarii << " a fost sters";
     }
 
     void Editare()

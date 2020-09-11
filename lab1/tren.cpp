@@ -65,7 +65,7 @@ public:
 
     ~Tren()
     {
-        std::cout << "Tren cu dest " << destinatia << " cu ora plec. " << ora_plecarii << " a fost sters";
+        std::cout << "Tren cu dest " << destinatia << " cu ora plec. " << ora_plecarii << " a fost sters" << endl;
     }
 
     void Editare()

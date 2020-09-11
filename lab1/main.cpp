@@ -19,13 +19,10 @@ enum SubProg
 
 int main()
 {
-
     int n;
     std::cout << "Dati nr. trenurilor: "; //init
     std::cin >> n;
-    Tren *elemente;
-    elemente = new Tren[n];
-    string dummy;
+    Tren *elemente = new Tren[n];
 
     bool continueLoop = true;
 
@@ -84,7 +81,7 @@ int main()
 
         case _AddNewElement:
         {
-            AddNewElement(elemente, n);
+            elemente = AddNewElement(elemente, n);
             break;
         }
 
@@ -104,10 +101,3 @@ int main()
     return 0;
 }
 
-// int main() {
-//     Tren tren;
-//     char stuff;
-//     cin >> stuff;
-//     tren.Editare();
-
-// }

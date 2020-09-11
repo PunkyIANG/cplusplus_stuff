@@ -49,14 +49,14 @@ void PrintAbovePrice(Tren elemente[], int n)
     }
 }
 
-void AddNewElement(Tren elemente[], int &n)
+Tren* AddNewElement(Tren elemente[], int &n)
 {
     int pos;
     cout << "Dati pozitia elem nou: ";
     cin >> pos;
     getline(cin, dummy);
     Tren *temp = new Tren[n + 1];
-    
+
     for (int i = 0; i <= n; i++)
     {
         if (i < pos)
@@ -66,7 +66,6 @@ void AddNewElement(Tren elemente[], int &n)
         else if (i == pos)
         {
             temp[i].Editare();
-            
         }
         else if (i > pos)
         {
@@ -78,7 +77,7 @@ void AddNewElement(Tren elemente[], int &n)
 
 
     delete[] elemente;
-    elemente = temp;
+    return temp;
 }
 
 void RemoveElemWithDestination(Tren elemente[], int &n)
@@ -99,6 +98,7 @@ void RemoveElemWithDestination(Tren elemente[], int &n)
             }
             n--;
             count++;
+            i--;
         }
     }
 

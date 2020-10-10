@@ -11,7 +11,6 @@ private:
     string destinatia;
     string ora_plecarii;
 
-
     void EditIfNotNull(string *data)
     {
         string temp;
@@ -90,8 +89,8 @@ public:
     void Afisare()
     {
         cout << "Trenul spre " << destinatia << " porneste la ora " << ora_plecarii
-                  << " cu " << nr_pasageri << " pasageri. Un bilet costa " << pretul_biletului << " lei." << endl
-                  << endl;
+             << " cu " << nr_pasageri << " pasageri. Un bilet costa " << pretul_biletului << " lei." << endl
+             << endl;
     }
 
     int GetPret()

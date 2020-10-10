@@ -17,11 +17,8 @@ enum TrainTypes
 void SwitchTrainType(Train *train)
 {
     int trainType = _NoChange;
-    Train *temp;
-    cout << "Started cast" << endl;
-    temp = train;
+    Train *temp = train;
 
-    //TODO: print some options over here
     cout << "Tipuri valabile: " << endl;
     cout << "0) Fara schimbari" << endl;
     cout << "1) Tren" << endl;
@@ -36,38 +33,39 @@ void SwitchTrainType(Train *train)
     {
     case _NoChange:
     {
+        cout << "No cast" << endl;
         break;
     }
 
     case _Train:
     {
-        train = new Train();
-        *train = dynamic_cast<Train &>(*temp);
-        cout << "Converted to train" << endl;
+        train = dynamic_cast<Train*>(temp);
+
+        cout << "Cast to train" << endl;
         break;
     }
 
     case _PassengerTrain:
     {
-        train = new PassengerTrain();
-        *train = dynamic_cast<PassengerTrain &>(*temp);
-        cout << "Converted to passenger train" << endl;
+        train = dynamic_cast<PassengerTrain*>(temp);
+
+        cout << "Cast to passenger train" << endl;
         break;
     }
 
     case _CargoTrain:
     {
-        train = new CargoTrain();
-        *train = dynamic_cast<CargoTrain &>(*temp);
-        cout << "Converted to cargo train" << endl;
+        train = dynamic_cast<CargoTrain*>(temp);
+
+        cout << "Cast to cargo train" << endl;
         break;
     }
 
     case _MixedTrain:
     {
-        train = new MixedTrain();
-        *train = dynamic_cast<MixedTrain &>(*temp);
-        cout << "Converted to mixed train" << endl;
+        train = dynamic_cast<MixedTrain*>(temp);
+
+        cout << "Cast to mixed train" << endl;
         break;
     }
 

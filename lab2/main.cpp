@@ -19,11 +19,13 @@ int main()
 {
     vector<Train *> trains;
 
-    Train *testSample = new Train();
+    Train *testSample = new PassengerTrain();
     testSample->Edit();
     testSample->Print();
 
-    SwitchTrainType(testSample);
+    SwitchTrainType(testSample);    //fix cast methods not working
 
     testSample->Print();
+
+    cout << "Test complete" << endl;
 }

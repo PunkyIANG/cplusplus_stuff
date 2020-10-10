@@ -11,13 +11,14 @@ protected:
     int passengersPerWagon;
 
 public:
-    virtual void Print() override
+    virtual void Print() const override
     {
         Train::PrintSpecific();
         PassengerTrain::PrintSpecific();
+        cout << endl;
     }
 
-    void PrintSpecific()
+    void PrintSpecific() const
     {
         cout << "Nr. vagoane pentru pasageri: " << passengerWagonCount << endl;
         cout << "Nr. pasageri/vagon: " << passengersPerWagon << endl;
@@ -37,12 +38,12 @@ public:
         EditIfNotNull(passengersPerWagon);
     }
 
-    int GetTrainMass() override
+    int GetTrainMass() const override
     {
         return PassengerTrain::GetSpecificMass() + Train::GetSpecificMass();
     }
 
-    int GetSpecificMass()
+    int GetSpecificMass() const
     {
         return passengerWagonCount * passengersPerWagon * massPerPassenger;
     }

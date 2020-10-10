@@ -9,15 +9,16 @@ protected:
     string wagonLayout;
 
 public:
-    void Print() override
+    void Print() const override final
     {
         Train::PrintSpecific();
         CargoTrain::PrintSpecific();
         PassengerTrain::PrintSpecific();
         MixedTrain::PrintSpecific();
+        cout << endl;
     }
 
-    void PrintSpecific()
+    void PrintSpecific() const
     {
         cout << "Schema vagoanelor: " << wagonLayout << endl;
     }
@@ -36,7 +37,7 @@ public:
         EditIfNotNull(wagonLayout);
     }
 
-    int GetTrainMass() override final
+    int GetTrainMass() const override final
     {
         return CargoTrain::GetSpecificMass() + PassengerTrain::GetSpecificMass() + Train::GetSpecificMass();
     }

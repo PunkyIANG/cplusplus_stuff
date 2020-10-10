@@ -8,13 +8,14 @@ protected:
     int massPerCargoWagon;
 
 public:
-    virtual void Print() override
+    virtual void Print() const override
     {
         Train::PrintSpecific();
         CargoTrain::PrintSpecific();
+        cout << endl;
     }
 
-    void PrintSpecific()
+    void PrintSpecific() const
     {
         cout << "Nr. vagoane cargo: " << cargoWagonCount << endl;
         cout << "Masa unui vagon cargo: " << massPerCargoWagon << endl;
@@ -34,12 +35,12 @@ public:
         EditIfNotNull(massPerCargoWagon);
     }
 
-    int GetTrainMass() override
+    int GetTrainMass() const override
     {
         return CargoTrain::GetSpecificMass() + Train::GetSpecificMass();
     }
 
-    int GetSpecificMass()
+    int GetSpecificMass() const
     {
         return cargoWagonCount * massPerCargoWagon;
     }

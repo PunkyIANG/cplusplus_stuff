@@ -92,7 +92,7 @@ void EditAll(vector<Train *> &trains)
     }
 }
 
-void PrintAll(const vector<Train *> trains)
+void PrintAll(const vector<Train *> &trains)
 {
     for (auto train : trains)
     {
@@ -110,7 +110,7 @@ void SortByMass(vector<Train *> &trains)
     sort(trains.begin(), trains.end(), CompareTrains);
 }
 
-void PrintBelowMass(const vector<Train *> trains)
+void PrintBelowMass(const vector<Train *> &trains)
 {
     int maxAllowedMass = 0;
     cout << "Dati masa maxima permisa: ";

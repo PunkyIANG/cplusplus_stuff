@@ -14,7 +14,7 @@ enum TrainTypes
     _MixedTrain = 4
 };
 
-Train* SwitchTrainType(Train *&train)
+Train* SwitchTrainType(Train *train)
 {
     int trainType = _NoChange;
 
@@ -85,10 +85,10 @@ Train* SwitchTrainType(Train *&train)
 
 void EditAll(vector<Train *> &trains)
 {
-    for (auto train : trains)
+    for (int i = 0; i < trains.size(); i++)
     {
-        train = SwitchTrainType(train);
-        train->Edit();
+        trains[i] = SwitchTrainType(trains[i]);
+        trains[i]->Edit();
     }
 }
 

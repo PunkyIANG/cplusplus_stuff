@@ -4,7 +4,7 @@
 class PassengerTrain : public virtual Train
 {
 private:
-    int massPerPassenger = 65;
+    int massPerPassenger = 70;
 
 protected:
     int passengerWagonCount;
@@ -32,9 +32,9 @@ public:
 
     void EditSpecific()
     {
-        cout << "Nr. vagoane pentru pasageri: ";
+        cout << "Nr. vagoane pentru pasageri (prev: " << passengerWagonCount << "): ";
         EditIfNotNull(passengerWagonCount);
-        cout << "Nr. pasageri/vagon: ";
+        cout << "Nr. pasageri/vagon (prev: " << passengersPerWagon << "): ";
         EditIfNotNull(passengersPerWagon);
     }
 
@@ -48,5 +48,10 @@ public:
         return passengerWagonCount * passengersPerWagon * massPerPassenger;
     }
 
-    PassengerTrain() = default;
+    PassengerTrain()
+    {
+        passengerWagonCount = 3;
+        passengersPerWagon = 20;
+        cout << "Created passenger train" << endl;
+    }
 };

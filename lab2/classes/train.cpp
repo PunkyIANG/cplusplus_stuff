@@ -9,8 +9,8 @@ using namespace std;
 class Train : public AbstractTrain
 {
 private:
-    string destinatia;
-    string ora_plecarii;
+    string destination;
+    string departure_time;
 
 protected:
     int locomotiveMass;
@@ -24,8 +24,8 @@ public:
 
     void PrintSpecific() const
     {
-        cout << "Destinatia: " << destinatia << endl;
-        cout << "Ora plecarii: " << ora_plecarii << endl;
+        cout << "Destinatia: " << destination << endl;
+        cout << "Ora plecarii: " << departure_time << endl;
         cout << "Masa totala: " << GetTrainMass() << endl;
     }
 
@@ -36,11 +36,11 @@ public:
 
     void EditSpecific()
     {
-        cout << "Destinatia: ";
-        EditIfNotNull(destinatia);
-        cout << "Ora plecarii: ";
-        EditIfNotNull(ora_plecarii);
-        cout << "Masa locomotivei: ";
+        cout << "Destinatia (prev: " << destination << "): ";
+        EditIfNotNull(destination);
+        cout << "Ora plecarii (prev: " << departure_time << "): ";
+        EditIfNotNull(departure_time);
+        cout << "Masa locomotivei (prev: " << locomotiveMass << "): ";
         EditIfNotNull(locomotiveMass);
     }
 
@@ -56,6 +56,13 @@ public:
 
     std::string GetDestination() const
     {
-        return destinatia;
+        return destination;
+    }
+
+    Train() {
+        destination = "Chisinau";
+        departure_time = "15:00";
+        locomotiveMass = 1500;
+        cout << "Created base train" << endl;
     }
 };

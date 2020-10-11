@@ -29,9 +29,9 @@ public:
 
     void EditSpecific()
     {
-        cout << "Nr. vagoane cargo: ";
+        cout << "Nr. vagoane cargo (prev: " << cargoWagonCount << "): ";
         EditIfNotNull(cargoWagonCount);
-        cout << "Masa unui vagon cargo: ";
+        cout << "Masa unui vagon cargo (prev: " << massPerCargoWagon << "): ";
         EditIfNotNull(massPerCargoWagon);
     }
 
@@ -43,5 +43,12 @@ public:
     int GetSpecificMass() const
     {
         return cargoWagonCount * massPerCargoWagon;
+    }
+
+    CargoTrain()
+    {
+        cargoWagonCount = 3;
+        massPerCargoWagon = 2000;
+        cout << "Created cargo train" << endl;
     }
 };

@@ -33,12 +33,18 @@ public:
 
     void EditSpecific()
     {
-        cout << "Schema vagoanelor: ";
+        cout << "Schema vagoanelor (prev: " << wagonLayout << "): ";
         EditIfNotNull(wagonLayout);
     }
 
     int GetTrainMass() const override final
     {
         return CargoTrain::GetSpecificMass() + PassengerTrain::GetSpecificMass() + Train::GetSpecificMass();
+    }
+
+    MixedTrain()
+    {
+        wagonLayout = "pppccc";
+        cout << "Created mixed train" << endl;
     }
 };

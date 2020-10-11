@@ -19,7 +19,7 @@ enum SubProg
 int main()
 {
     vector<Train *> trains;
-    int n = 5;
+    int n = 3;  //default value
     cout << "Dati nr. trenurilor: "; //init
     EditIfNotNull(n);
 
@@ -39,7 +39,7 @@ int main()
         cout << _EditAll << ") Input tren" << endl;
         cout << _PrintAll << ") Afisare tren" << endl;
         cout << _SortByMass << ") Sort trenuri dupa masa" << endl;
-        cout << _PrintBelowMass << ") Afisare trenuri cu pret > x" << endl;
+        cout << _PrintBelowMass << ") Afisare trenuri cu masa < x" << endl;
         cout << _AddAtPosition << ") Adauga tren pe pos x" << endl;
         cout << _RemoveTrainWithDestination << ") Sterge trenurile" << endl;
         cout << "Optiunea: ";

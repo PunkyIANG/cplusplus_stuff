@@ -14,7 +14,7 @@ enum TrainTypes
     _MixedTrain = 4
 };
 
-void SwitchTrainType(Train *train)
+void SwitchTrainType(Train *&train)
 {
     int trainType = _NoChange;
 
@@ -32,7 +32,6 @@ void SwitchTrainType(Train *train)
     {
     case _NoChange:
     {
-        cout << "No cast" << endl;
         break;
     }
 
@@ -41,7 +40,6 @@ void SwitchTrainType(Train *train)
         delete train;
         train = new Train();
 
-        cout << "Cast to train" << endl;
         break;
     }
 
@@ -50,7 +48,6 @@ void SwitchTrainType(Train *train)
         delete train;
         train = new PassengerTrain();
 
-        cout << "Cast to passenger train" << endl;
         break;
     }
 
@@ -59,7 +56,6 @@ void SwitchTrainType(Train *train)
         delete train;
         train = new CargoTrain();
 
-        cout << "Cast to cargo train" << endl;
         break;
     }
 
@@ -68,7 +64,6 @@ void SwitchTrainType(Train *train)
         delete train;
         train = new MixedTrain();
 
-        cout << "Cast to mixed train" << endl;
         break;
     }
 
@@ -79,7 +74,7 @@ void SwitchTrainType(Train *train)
     }
 }
 
-void EditAll(vector<Train *> trains)
+void EditAll(vector<Train *> &trains)
 {
     for (auto train : trains)
     {
@@ -90,7 +85,7 @@ void EditAll(vector<Train *> trains)
 
 void PrintAll(const vector<Train *> trains)
 {
-    for (auto &train : trains)
+    for (auto train : trains)
     {
         train->Print();
     }
@@ -101,7 +96,7 @@ bool CompareTrains(const Train *t1, const Train *t2)
     return (t1->GetTrainMass() < t2->GetTrainMass());
 }
 
-void SortByMass(vector<Train *> trains)
+void SortByMass(vector<Train *> &trains)
 {
     sort(trains.begin(), trains.end(), CompareTrains);
 }
@@ -112,7 +107,7 @@ void PrintBelowMass(const vector<Train *> trains)
     cout << "Dati masa maxima permisa: ";
     EditIfNotNull(maxAllowedMass);
 
-    for (auto &train : trains)
+    for (auto train : trains)
     {
         if (train->GetTrainMass() <= maxAllowedMass || maxAllowedMass == 0)
         {
@@ -121,7 +116,7 @@ void PrintBelowMass(const vector<Train *> trains)
     }
 }
 
-void AddAtPosition(vector<Train *> trains)
+void AddAtPosition(vector<Train *> &trains)
 {
     int newPos = trains.size();
     cout << "Dati pozitia elementului nou: ";
@@ -132,7 +127,7 @@ void AddAtPosition(vector<Train *> trains)
     trains[newPos]->Edit();
 }
 
-void RemoveTrainWithDestination(vector<Train *> trains)
+void RemoveTrainWithDestination(vector<Train *> &trains)
 {
     string destinationToRemove = "";
     cout << "Dati destinatia de sters: ";

@@ -23,7 +23,7 @@ public:
         cout << "Schema vagoanelor: " << wagonLayout << endl;
     }
 
-    void Edit() override
+    void Edit() override final
     {
         Train::EditSpecific();
         CargoTrain::EditSpecific();

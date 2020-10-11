@@ -17,7 +17,6 @@ enum TrainTypes
 void SwitchTrainType(Train *train)
 {
     int trainType = _NoChange;
-    Train *temp = train;
 
     cout << "Tipuri valabile: " << endl;
     cout << "0) Fara schimbari" << endl;
@@ -39,7 +38,8 @@ void SwitchTrainType(Train *train)
 
     case _Train:
     {
-        train = dynamic_cast<Train*>(temp);
+        delete train;
+        train = new Train();
 
         cout << "Cast to train" << endl;
         break;
@@ -47,7 +47,8 @@ void SwitchTrainType(Train *train)
 
     case _PassengerTrain:
     {
-        train = dynamic_cast<PassengerTrain*>(temp);
+        delete train;
+        train = new PassengerTrain();
 
         cout << "Cast to passenger train" << endl;
         break;
@@ -55,7 +56,8 @@ void SwitchTrainType(Train *train)
 
     case _CargoTrain:
     {
-        train = dynamic_cast<CargoTrain*>(temp);
+        delete train;
+        train = new CargoTrain();
 
         cout << "Cast to cargo train" << endl;
         break;
@@ -63,7 +65,8 @@ void SwitchTrainType(Train *train)
 
     case _MixedTrain:
     {
-        train = dynamic_cast<MixedTrain*>(temp);
+        delete train;
+        train = new MixedTrain();
 
         cout << "Cast to mixed train" << endl;
         break;
@@ -74,13 +77,15 @@ void SwitchTrainType(Train *train)
         cout << "Optiune inexistenta, continuam" << endl;
     }
     }
-
-    delete temp;
 }
 
 void EditAll(vector<Train *> trains)
 {
-    SwitchTrainType(trains[0]);
+    for (auto train : trains)
+    {
+        SwitchTrainType(train);
+        train->Edit();
+    }
 }
 
 void PrintAll(const vector<Train *> trains)
@@ -104,7 +109,6 @@ void SortByMass(vector<Train *> trains)
 void PrintBelowMass(const vector<Train *> trains)
 {
     int maxAllowedMass = 0;
-
     cout << "Dati masa maxima permisa: ";
     EditIfNotNull(maxAllowedMass);
 
@@ -117,8 +121,15 @@ void PrintBelowMass(const vector<Train *> trains)
     }
 }
 
-void EditAtPosition(vector<Train *> trains)
+void AddAtPosition(vector<Train *> trains)
 {
+    int newPos = trains.size();
+    cout << "Dati pozitia elementului nou: ";
+    EditIfNotNull(newPos);
+
+    trains.insert(trains.begin() + newPos, new Train());
+    SwitchTrainType(trains[newPos]);
+    trains[newPos]->Edit();
 }
 
 void RemoveTrainWithDestination(vector<Train *> trains)

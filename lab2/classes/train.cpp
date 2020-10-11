@@ -18,6 +18,7 @@ protected:
 public:
     virtual void Print() const override
     {
+        cout << "Tip tren: base" << endl;
         Train::PrintSpecific();
         cout << endl;
     }
@@ -64,5 +65,9 @@ public:
         departure_time = "15:00";
         locomotiveMass = 1500;
         cout << "Created base train" << endl;
+    }
+
+    ~Train() {
+        cout << "Removed base train" << endl;
     }
 };

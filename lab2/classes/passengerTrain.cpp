@@ -13,6 +13,7 @@ protected:
 public:
     virtual void Print() const override
     {
+        cout << "Tip tren: passenger" << endl;
         Train::PrintSpecific();
         PassengerTrain::PrintSpecific();
         cout << endl;
@@ -53,5 +54,10 @@ public:
         passengerWagonCount = 3;
         passengersPerWagon = 20;
         cout << "Created passenger train" << endl;
+    }
+
+    ~PassengerTrain()
+    {
+        cout << "Removed passenger train" << endl;
     }
 };

@@ -9,7 +9,7 @@ int main() {
     temp->Edit();
     temp->Print();
 
-    SwitchTrainType(temp);
+    temp = SwitchTrainType(temp);
 
     temp->Edit();
     temp->Print();

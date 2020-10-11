@@ -11,6 +11,7 @@ protected:
 public:
     void Print() const override final
     {
+        cout << "Tip tren: mixed" << endl;
         Train::PrintSpecific();
         CargoTrain::PrintSpecific();
         PassengerTrain::PrintSpecific();
@@ -46,5 +47,10 @@ public:
     {
         wagonLayout = "pppccc";
         cout << "Created mixed train" << endl;
+    }
+
+    ~MixedTrain()
+    {
+        cout << "Removed mixed train" << endl;
     }
 };

@@ -14,7 +14,7 @@ enum TrainTypes
     _MixedTrain = 4
 };
 
-void SwitchTrainType(Train *&train)
+Train* SwitchTrainType(Train *&train)
 {
     int trainType = _NoChange;
 
@@ -32,13 +32,15 @@ void SwitchTrainType(Train *&train)
     {
     case _NoChange:
     {
+        return train;
         break;
     }
 
     case _Train:
     {
         delete train;
-        train = new Train();
+        Train* result = new Train();
+        return result;
 
         break;
     }
@@ -46,7 +48,8 @@ void SwitchTrainType(Train *&train)
     case _PassengerTrain:
     {
         delete train;
-        train = new PassengerTrain();
+        Train* result = new PassengerTrain();
+        return result;
 
         break;
     }
@@ -54,7 +57,8 @@ void SwitchTrainType(Train *&train)
     case _CargoTrain:
     {
         delete train;
-        train = new CargoTrain();
+        Train* result = new CargoTrain();
+        return result;
 
         break;
     }
@@ -62,7 +66,8 @@ void SwitchTrainType(Train *&train)
     case _MixedTrain:
     {
         delete train;
-        train = new MixedTrain();
+        Train* result = new MixedTrain();
+        return result;
 
         break;
     }
@@ -70,15 +75,19 @@ void SwitchTrainType(Train *&train)
     default:
     {
         cout << "Optiune inexistenta, continuam" << endl;
+        return train;
     }
     }
+
+    cout << "uh, this isn't supposed to happen" << endl;
+    return train;
 }
 
 void EditAll(vector<Train *> &trains)
 {
     for (auto train : trains)
     {
-        SwitchTrainType(train);
+        train = SwitchTrainType(train);
         train->Edit();
     }
 }
@@ -123,7 +132,7 @@ void AddAtPosition(vector<Train *> &trains)
     EditIfNotNull(newPos);
 
     trains.insert(trains.begin() + newPos, new Train());
-    SwitchTrainType(trains[newPos]);
+    trains[newPos] = SwitchTrainType(trains[newPos]);
     trains[newPos]->Edit();
 }
 

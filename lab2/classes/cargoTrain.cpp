@@ -10,6 +10,7 @@ protected:
 public:
     virtual void Print() const override
     {
+        cout << "Tip tren: cargo" << endl;
         Train::PrintSpecific();
         CargoTrain::PrintSpecific();
         cout << endl;
@@ -50,5 +51,10 @@ public:
         cargoWagonCount = 3;
         massPerCargoWagon = 2000;
         cout << "Created cargo train" << endl;
+    }
+
+    ~CargoTrain()
+    {
+        cout << "Removed cargo train" << endl;
     }
 };

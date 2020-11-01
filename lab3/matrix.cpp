@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 using namespace std;
 
 class Matrix
 {
-private:
+public:
     int size;
     vector<vector<float>> values;
 
@@ -91,33 +92,28 @@ public:
         cout << endl;
     }
 
-    float Determinant() const
+    float Determinant()
     {
+        if (size < 1) {
+            cout << "ERROR: bad input matrix for determinant" << endl;
+            return 0;
+        }
         if (size == 1)
         {
-            return values[1][1];
+            return values[0][0];
         }
         else if (size == 2)
         {
-            return values[1][1] * values[2][2] - values[1][2] * values[2][1];
+            return values[0][0] * values[1][1] - values[0][1] * values[1][0];
         }
         else
         {
-        }
-    }
-
-    float Determinant(Matrix matrix) const
-    {
-        if (size == 1)
-        {
-            return values[1][1];
-        }
-        else if (size == 2)
-        {
-            return values[1][1] * values[2][2] - values[1][2] * values[2][1];
-        }
-        else
-        {
+            float result;
+            for (int i = 0; i < size; i++)
+            {
+                result += pow(-1, i + 0) * values[i][0] * Matrix(*this, i, 0).Determinant();
+            }
+            return result;
         }
     }
 
@@ -131,12 +127,12 @@ public:
         return *this;
     }
 
-    // Matrix &operator--(int) //--matrix
-    // {
-    //     Matrix temp(*this);
-    //     operator--();
-    //     return temp;
-    // }
+    Matrix &operator--(int) //--matrix
+    {
+        Matrix temp(*this);
+        operator--();
+        return temp;
+    }
 
     Matrix &operator=(const Matrix &a) // matrix = matrix2
     {
@@ -160,5 +156,7 @@ public:
 int main()
 {
     Matrix x(3);
+    x.Print();
+    x--;
     x.Print();
 }

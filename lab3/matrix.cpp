@@ -1,31 +1,13 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 class Matrix
 {
 private:
-    class Grid
-    {
-    private:
-        int size;
-        float *data;
-
-    public:
-        Grid(int _size) : size{_size}, data{new float[size * size]} {}
-
-        Grid() : size{10}, data{new float[100]} {}
-
-        float *operator[](size_t row) { return row * size + data; }
-
-        float &operator()(size_t row, size_t column)
-        {
-            return data[row * size + column];
-        }
-    };
-
     int size;
-    Grid values;
+    vector<vector<float>> values;
 
     void AssignIdentityMatrix()
     {
@@ -41,46 +23,31 @@ private:
                 {
                     values[i][j] = 0;
                 }
-                cout << values[i][j] << " ";
             }
-            cout << endl;
         }
     }
 
 public:
-    Matrix()
+    Matrix() //size = 10; generating identity matrix
     {
         size = 10;
-        values = Grid(size);
+        values = vector<vector<float>>(size, vector<float>(size));
 
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                if (i == j)
-                {
-                    values[i][j] = 1;
-                }
-                else
-                {
-                    values[i][j] = 0;
-                }
-            }
-        }
+        AssignIdentityMatrix();
     }
 
-    Matrix(int _size)
+    Matrix(int _size) //size as parameter; generating identity matrix
     {
         size = _size;
-        values = Grid(size);
+        values = vector<vector<float>>(size, vector<float>(size));
 
-        void AssignIdentityMatrix();
+        AssignIdentityMatrix();
     }
 
-    Matrix(const Matrix &_matrix)
+    Matrix(const Matrix &_matrix) //copying constructor
     {
         size = _matrix.size;
-        values = Grid(size);
+        values = vector<vector<float>>(size, vector<float>(size));
 
         for (int i = 0; i < size; i++)
         {
@@ -91,10 +58,10 @@ public:
         }
     }
 
-    Matrix(const Matrix &_matrix, int x, int y)
+    Matrix(const Matrix &_matrix, int x, int y) //copying constructor specifically for determinant calc
     {
         size = _matrix.size - 1;
-        values = Grid(size);
+        values = vector<vector<float>>(size, vector<float>(size));
 
         for (int i = 0; i < size; i++)
         {
@@ -180,8 +147,6 @@ public:
 
         for (int i = 0; i < size; i++)
         {
-            values[i] = new float[size];
-
             for (int j = 0; j < size; j++)
             {
                 values[i][j] = a.values[i][j];
@@ -194,5 +159,6 @@ public:
 
 int main()
 {
-    Matrix x = Matrix(3);
+    Matrix x(3);
+    x.Print();
 }

@@ -117,6 +117,10 @@ public:
         }
     }
 
+    Matrix Minor() {
+        
+    }
+
     Matrix &operator--() //matrix--
     {
         for (int i = 0; i < size; i++)

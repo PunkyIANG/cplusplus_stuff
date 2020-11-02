@@ -79,6 +79,20 @@ public:
     {
     }
 
+public:
+    float Value(int x, int y)
+    {
+        if ((x < size) & (y < size) & (x >= 0) & (y >= 0))
+        {
+            return values[x][y];
+        }
+        else
+        {
+            cout << "ERROR: id out of bounds" << endl;
+            return 0;
+        }
+    }
+
     void Print()
     {
         for (int i = 0; i < size; i++)
@@ -175,12 +189,14 @@ public:
         if (Determinant() != 0)
         {
             return MinorMatrix().CofactorMatrix().AdjointMatrix() * (1 / Determinant());
-        } else {
+        }
+        else
+        {
             return *this;
         }
     }
 
-    Matrix operator--() //matrix--
+    Matrix &operator--() //--matrix
     {
         for (int i = 0; i < size; i++)
         {
@@ -190,7 +206,7 @@ public:
         return *this;
     }
 
-    Matrix operator--(int) //--matrix
+    Matrix operator--(int) //matrix--
     {
 
         Matrix temp(*this);
@@ -198,7 +214,31 @@ public:
         return temp;
     }
 
-    Matrix &operator*(float a)
+    Matrix operator-(const Matrix &a)
+    {
+        if (size != a.size)
+        {
+            cout << "ERROR: subtraction of matrices of different size" << endl;
+            return *this;
+        }
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                values[i][j] -= a.values[i][j];
+            }
+        }
+
+        return *this;
+    }
+
+    Matrix operator-(float a)
+    {
+        return *this - Matrix(size) * a;
+    }
+
+    Matrix operator*(float a)
     {
         for (int i = 0; i < size; i++)
         {
@@ -206,23 +246,28 @@ public:
             {
                 values[i][j] = a * values[i][j];
             }
-        }   
+        }
 
         return *this;
     }
 
-    Matrix operator*(const Matrix &a) {
-        if (size != a.size) {
+    Matrix operator*(const Matrix &a)
+    {
+        if (size != a.size)
+        {
             cout << "ERROR: multiplied matrix size differs" << endl;
             return *this;
         }
 
         Matrix result(size);
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
                 result.values[i][j] = 0;
-                for (int k = 0; k < size; k++) {
+                for (int k = 0; k < size; k++)
+                {
                     result.values[i][j] += values[i][k] * a.values[k][j];
                 }
             }
@@ -249,14 +294,76 @@ public:
         return *this;
     }
 
-    Matrix operator/=(Matrix a) {   //division is basically multiplying with inverse
+    Matrix operator/=(Matrix a)
+    { //division is basically multiplying with inverse
         return *this * a.Inverse();
+    }
+
+    bool operator<=(Matrix a)
+    {
+        if (Determinant() <= a.Determinant())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 };
 
+Matrix operator-(float a, Matrix b)
+{
+    return ((Matrix(b.size) * a) - b);
+}
+
+Matrix operator*(float a, Matrix b)
+{
+    for (int i = 0; i < b.size; i++)
+    {
+        for (int j = 0; j < b.size; j++)
+        {
+            b.values[i][j] = a * b.values[i][j];
+        }
+    }
+
+    return b;
+}
+
+ostream &operator<<(ostream &out, const Matrix &matrix)
+{
+    for (int i = 0; i < matrix.size; i++)
+    {
+        for (int j = 0; j < matrix.size; j++)
+        {
+            out << matrix.values[i][j] << " ";
+        }
+        out << endl;
+    }
+
+    return out;
+}
+
+istream &operator>>(std::istream &in, Matrix &matrix)
+{
+    cout << "Size: ";
+    in >> matrix.size;
+
+    cout << "Matrix: ";
+    for (int i = 0; i < matrix.size; i++)
+    {
+        for (int j = 0; j < matrix.size; j++)
+        {
+            in >> matrix.values[i][j];
+        }
+    }
+    return in;
+}
+
 int main()
 {
-    Matrix x(3), y(3);
-    x /= y;
-    x.Print();
+    Matrix x(3);
+    x = x * 2;
+
+    cout << (2 - x);
 }

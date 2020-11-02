@@ -6,7 +6,7 @@ Se vor prevedea funcții membri pentru:
 
 <li>accesul la elementele vectorului;</li>
 
-<li>supraîncărcarea operatorului ob1/= ob2 împărțirea unei matrice la o altă matrice dată ca argument;</li>
+<li>supraîncărcarea operatorului ob1/= ob2 - done împărțirea unei matrice la o altă matrice dată ca argument;</li>
 
 <li>supraîncărcarea operatorului ob1-- postfix și --ob1 prefix;</li>
 

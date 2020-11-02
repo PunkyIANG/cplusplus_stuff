@@ -109,7 +109,7 @@ public:
         }
         else
         {
-            float result;
+            float result = 0;
             for (int i = 0; i < size; i++)
             {
                 result += pow(-1, i + 0) * values[i][0] * Matrix(*this, i, 0).Determinant();
@@ -141,7 +141,7 @@ public:
         {
             for (int j = 0; j < size; j++)
             {
-                if ((i + j) % 2 == 1)
+                if (((i + j) % 2 == 1) & (values[i][j] != 0))
                 {
                     result.values[i][j] = -values[i][j];
                 }
@@ -170,7 +170,17 @@ public:
         return result;
     }
 
-    Matrix &operator--() //matrix--
+    Matrix Inverse()
+    {
+        if (Determinant() != 0)
+        {
+            return MinorMatrix().CofactorMatrix().AdjointMatrix() * (1 / Determinant());
+        } else {
+            return *this;
+        }
+    }
+
+    Matrix operator--() //matrix--
     {
         for (int i = 0; i < size; i++)
         {
@@ -180,41 +190,45 @@ public:
         return *this;
     }
 
-    Matrix &operator--(int) //--matrix
+    Matrix operator--(int) //--matrix
     {
+
         Matrix temp(*this);
         operator--();
         return temp;
     }
 
-    friend Matrix &operator*(const Matrix &lhs, float rhs)
+    Matrix &operator*(float a)
     {
-        Matrix temp(lhs);
-
-        for (int i = 0; i < lhs.size; i++)
+        for (int i = 0; i < size; i++)
         {
-            for (int j = 0; j < lhs.size; j++)
+            for (int j = 0; j < size; j++)
             {
-                temp.values[i][j] = rhs * lhs.values[i][j];
+                values[i][j] = a * values[i][j];
             }
-        }
+        }   
 
-        return temp;
+        return *this;
     }
 
-    friend Matrix &operator*(float lhs, const Matrix &rhs)
-    {
-        Matrix temp(rhs);
+    Matrix operator*(const Matrix &a) {
+        if (size != a.size) {
+            cout << "ERROR: multiplied matrix size differs" << endl;
+            return *this;
+        }
 
-        for (int i = 0; i < rhs.size; i++)
-        {
-            for (int j = 0; j < rhs.size; j++)
-            {
-                temp.values[i][j] = lhs * rhs.values[i][j];
+        Matrix result(size);
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                result.values[i][j] = 0;
+                for (int k = 0; k < size; k++) {
+                    result.values[i][j] += values[i][k] * a.values[k][j];
+                }
             }
         }
 
-        return temp;
+        return result;
     }
 
     Matrix &operator=(const Matrix &a) // matrix = matrix2
@@ -235,16 +249,14 @@ public:
         return *this;
     }
 
-    Matrix Inverse()
-    {
-        Matrix result = MinorMatrix().CofactorMatrix().AdjointMatrix() * (1 / Determinant()) ;
+    Matrix operator/=(Matrix a) {   //division is basically multiplying with inverse
+        return *this * a.Inverse();
     }
 };
 
 int main()
 {
-    Matrix x(3);
-    x.Print();
-    x--;
+    Matrix x(3), y(3);
+    x /= y;
     x.Print();
 }

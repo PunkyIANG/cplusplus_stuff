@@ -94,7 +94,8 @@ public:
 
     float Determinant()
     {
-        if (size < 1) {
+        if (size < 1)
+        {
             cout << "ERROR: bad input matrix for determinant" << endl;
             return 0;
         }
@@ -117,8 +118,56 @@ public:
         }
     }
 
-    Matrix Minor() {
-        
+    Matrix MinorMatrix()
+    {
+        Matrix result(size);
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                result.values[i][j] = Matrix(*this, i, j).Determinant();
+            }
+        }
+
+        return result;
+    }
+
+    Matrix CofactorMatrix()
+    { //schimbam semnul la fiecare cifra cu suma id-urilor impara
+        Matrix result(size);
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                if ((i + j) % 2 == 1)
+                {
+                    result.values[i][j] = -values[i][j];
+                }
+                else
+                {
+                    result.values[i][j] = values[i][j];
+                }
+            }
+        }
+
+        return result;
+    }
+
+    Matrix AdjointMatrix() //matricea transpusa, mirror dupa diagonala principala
+    {
+        Matrix result(size);
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                result.values[i][j] = values[j][i];
+            }
+        }
+
+        return result;
     }
 
     Matrix &operator--() //matrix--
@@ -138,6 +187,36 @@ public:
         return temp;
     }
 
+    friend Matrix &operator*(const Matrix &lhs, float rhs)
+    {
+        Matrix temp(lhs);
+
+        for (int i = 0; i < lhs.size; i++)
+        {
+            for (int j = 0; j < lhs.size; j++)
+            {
+                temp.values[i][j] = rhs * lhs.values[i][j];
+            }
+        }
+
+        return temp;
+    }
+
+    friend Matrix &operator*(float lhs, const Matrix &rhs)
+    {
+        Matrix temp(rhs);
+
+        for (int i = 0; i < rhs.size; i++)
+        {
+            for (int j = 0; j < rhs.size; j++)
+            {
+                temp.values[i][j] = lhs * rhs.values[i][j];
+            }
+        }
+
+        return temp;
+    }
+
     Matrix &operator=(const Matrix &a) // matrix = matrix2
     {
         if (this == &a) //check matrix = matrix
@@ -154,6 +233,11 @@ public:
         }
 
         return *this;
+    }
+
+    Matrix Inverse()
+    {
+        Matrix result = MinorMatrix().CofactorMatrix().AdjointMatrix() * (1 / Determinant()) ;
     }
 };
 

@@ -196,92 +196,24 @@ public:
         }
     }
 
-    Matrix &operator--() //--matrix
-    {
-        for (int i = 0; i < size; i++)
-        {
-            values[i][i]--;
-        }
+    friend Matrix operator--(Matrix a); //--matrix
 
-        return *this;
-    }
+    friend Matrix operator--(Matrix &a, int x); //matrix--
 
-    Matrix operator--(int) //matrix--
-    {
+    friend Matrix operator-(Matrix a, const Matrix &b);
 
-        Matrix temp(*this);
-        operator--();
-        return temp;
-    }
+    friend Matrix operator-(Matrix a, float b);
 
-    Matrix operator-(const Matrix &a)
-    {
-        if (size != a.size)
-        {
-            cout << "ERROR: subtraction of matrices of different size" << endl;
-            return *this;
-        }
+    friend Matrix operator*(Matrix, float);
 
-        Matrix result(*this);
-
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                result.values[i][j] -= a.values[i][j];
-            }
-        }
-
-        return result;
-    }
-
-    Matrix operator-(float a)
-    {
-        return *this - Matrix(size) * a;
-    }
-
-    Matrix operator*(float a)
-    {
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                values[i][j] = a * values[i][j];
-            }
-        }
-
-        return *this;
-    }
-
-    Matrix operator*(const Matrix &a)
-    {
-        if (size != a.size)
-        {
-            cout << "ERROR: multiplied matrix size differs" << endl;
-            return *this;
-        }
-
-        Matrix result(size);
-
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                result.values[i][j] = 0;
-                for (int k = 0; k < size; k++)
-                {
-                    result.values[i][j] += values[i][k] * a.values[k][j];
-                }
-            }
-        }
-
-        return result;
-    }
+    friend Matrix operator*(Matrix, const Matrix &);
 
     Matrix &operator=(const Matrix &a) // matrix = matrix2
     {
         if (this == &a) //check matrix = matrix
+        {
             return *this;
+        }
 
         size = a.size;
 
@@ -296,31 +228,103 @@ public:
         return *this;
     }
 
-    Matrix operator/=(Matrix a)
-    { //division is basically multiplying with inverse
-        *this = *this * a.Inverse();
-        return (*this * a.Inverse());
-    }
+    friend Matrix operator/=(const Matrix &, Matrix);
 
-    bool operator<=(Matrix a)
-    {
-        if (Determinant() <= a.Determinant())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    friend bool operator<=(Matrix, Matrix);
 
     friend ostream &operator<<(ostream &out, const Matrix &matrix);
+
     friend istream &operator>>(std::istream &in, Matrix &matrix);
 };
 
-Matrix operator-(float a, Matrix b)
+Matrix operator--(Matrix a) //--matrix
+{
+    for (int i = 0; i < a.size; i++)
+    {
+        a.values[i][i]--;
+    }
+
+    return a;
+}
+
+Matrix operator--(Matrix &a, int x) //matrix--
+{
+    Matrix temp(a);
+    --a;
+    return temp;
+}
+
+Matrix operator-(Matrix a, const Matrix &b)
+{
+    if (a.size != b.size)
+    {
+        cout << "ERROR: subtraction of matrices of different size" << endl;
+        return a;
+    }
+
+    for (int i = 0; i < a.size; i++)
+    {
+        for (int j = 0; j < a.size; j++)
+        {
+            a.values[i][j] -= b.values[i][j];
+        }
+    }
+
+    return a;
+}
+
+Matrix operator-(Matrix a, float b)
+{
+    return a - Matrix(a.size) * b;
+}
+
+Matrix operator-(float a, Matrix b) //
 {
     return ((Matrix(b.size) * a) - b);
+}
+
+Matrix operator/=(Matrix &a, Matrix b)
+{ //division is basically multiplying with inverse
+    a = a * b.Inverse();
+    return a * b.Inverse();
+}
+
+Matrix operator*(Matrix a, const Matrix &b)
+{
+    if (a.size != b.size)
+    {
+        cout << "ERROR: multiplied matrix size differs" << endl;
+        return a;
+    }
+
+    Matrix result(a.size);
+
+    for (int i = 0; i < a.size; i++)
+    {
+        for (int j = 0; j < a.size; j++)
+        {
+            result.values[i][j] = 0;
+            for (int k = 0; k < a.size; k++)
+            {
+                result.values[i][j] += a.values[i][k] * b.values[k][j];
+            }
+        }
+    }
+
+    return result;
+}
+
+Matrix operator*(Matrix a, float b)
+{
+    for (int i = 0; i < a.size; i++)
+    {
+        for (int j = 0; j < a.size; j++)
+        {
+            a.values[i][j] = b * a.values[i][j];
+        }
+    }
+
+    return a;
 }
 
 Matrix operator*(float a, Matrix b)
@@ -334,6 +338,18 @@ Matrix operator*(float a, Matrix b)
     }
 
     return b;
+}
+
+bool operator<=(Matrix a, Matrix b)
+{
+    if (a.Determinant() <= b.Determinant())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 ostream &operator<<(ostream &out, const Matrix &matrix)
@@ -374,7 +390,7 @@ int main()
     cout << "1)" << endl;
     cin >> y;
     cout << y << endl; //1
-    //x.Print();
+    //y.Print();
 
     cout << "2) " << y.Value(0, 0) << endl
          << endl; //2

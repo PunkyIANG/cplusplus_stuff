@@ -18,9 +18,41 @@ T powInt(const T base, const int exp) {
 template <typename T>
 class Matrix
 {
-public:
+private:
     int size;
-    vector<vector<T>> values;
+    T *values;
+
+public:
+    int GetSize() {
+        return size;
+    }
+
+    void SetSize(int _size) {
+        size = _size;
+    }
+
+    T GetValue(int x, int y) const
+    {
+        if ((x < size) & (y < size) & (x >= 0) & (y >= 0))
+        {
+            return values[x * size + y];
+        }
+        else
+        {
+            throw "ERROR: id out of bounds";
+        }
+    }
+
+    void SetValue(int x, int y, T value) {
+        if ((x < size) & (y < size) & (x >= 0) & (y >= 0))
+        {
+            values[x * size + y] = value;
+        }
+        else
+        {
+            throw "ERROR: id out of bounds";
+        }
+    }
 
     void AssignIdentityMatrix()
     {
@@ -30,11 +62,11 @@ public:
             {
                 if (i == j)
                 {
-                    values[i][j] = 1;
+                    SetValue(i, j, 1);
                 }
                 else
                 {
-                    values[i][j] = 0;
+                    SetValue(i, j, 0);
                 }
             }
         }
@@ -42,8 +74,8 @@ public:
 
     Matrix() //size = 10; generating identity matrix
     {
-        size = 10;
-        values = vector<vector<T>>(size, vector<T>(size));
+        size = 3;
+        values = new T[size * size];
 
         AssignIdentityMatrix();
     }
@@ -51,7 +83,7 @@ public:
     Matrix(int _size) //size as parameter; generating identity matrix
     {
         size = _size;
-        values = vector<vector<T>>(size, vector<T>(size));
+        values = new T[size * size];
 
         AssignIdentityMatrix();
     }
@@ -59,13 +91,13 @@ public:
     Matrix(const Matrix &_matrix) //copying constructor
     {
         size = _matrix.size;
-        values = vector<vector<T>>(size, vector<T>(size));
+        values = new T[size * size];
 
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
             {
-                values[i][j] = _matrix.values[i][j];
+                SetValue(i, j, _matrix.GetValue(i, j));
             }
         }
     }
@@ -73,7 +105,7 @@ public:
     Matrix(const Matrix &_matrix, int x, int y) //copying constructor specifically for determinant calc
     {
         size = _matrix.size - 1;
-        values = vector<vector<T>>(size, vector<T>(size));
+        values = new T[size * size];
 
         for (int i = 0; i < size; i++)
         {
@@ -81,38 +113,13 @@ public:
             {
                 int tempI = (i < x) ? i : i + 1;
                 int tempJ = (j < y) ? j : j + 1;
-                values[i][j] = _matrix.values[tempI][tempJ];
+                SetValue(i, j, _matrix.GetValue(tempI, tempJ));
             }
         }
     }
 
     ~Matrix()
     {
-    }
-
-    T Value(int x, int y)
-    {
-        if ((x < size) & (y < size) & (x >= 0) & (y >= 0))
-        {
-            return values[x][y];
-        }
-        else
-        {
-            throw "ERROR: id out of bounds";
-        }
-    }
-
-    void Print()
-    {
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                cout << values[i][j] << " ";
-            }
-            cout << endl;
-        }
-        cout << endl;
     }
 
     T Determinant()
@@ -123,18 +130,18 @@ public:
         }
         if (size == 1)
         {
-            return values[0][0];
+            return GetValue(0, 0);
         }
         else if (size == 2)
         {
-            return values[0][0] * values[1][1] - values[0][1] * values[1][0];
+            return GetValue(0,0) * GetValue(1,1) - GetValue(0,1) * GetValue(1,0);
         }
         else
         {
             T result = 0;
             for (int i = 0; i < size; i++)
             {
-                result += powInt((T)-1, i) * values[i][0] * Matrix(*this, i, 0).Determinant();
+                result += powInt((T)-1, i) * GetValue(i, 0) * Matrix(*this, i, 0).Determinant();
             }
             return result;
         }
@@ -148,7 +155,8 @@ public:
         {
             for (int j = 0; j < size; j++)
             {
-                result.values[i][j] = Matrix(*this, i, j).Determinant();
+                //result.values[i][j] = Matrix(*this, i, j).Determinant();
+                result.SetValue(i, j, Matrix(*this, i, j).Determinant());
             }
         }
 
@@ -163,14 +171,7 @@ public:
         {
             for (int j = 0; j < size; j++)
             {
-                if (((i + j) % 2 == 1) & (values[i][j] != 0))
-                {
-                    result.values[i][j] = -values[i][j];
-                }
-                else
-                {
-                    result.values[i][j] = values[i][j];
-                }
+                result.SetValue(i, j, GetValue(i, j) * powInt(-1, i + j));
             }
         }
 
@@ -185,7 +186,7 @@ public:
         {
             for (int j = 0; j < size; j++)
             {
-                result.values[i][j] = values[j][i];
+                result.SetValue(i, j, GetValue(j, i));
             }
         }
 
@@ -208,7 +209,7 @@ public:
     {
         for (int i = 0; i < size; i++)
         {
-            values[i][i]--;
+            SetValue(i, i, GetValue(i, i) - 1);
         }
 
         return *this;
@@ -235,7 +236,7 @@ public:
         {
             for (int j = 0; j < size; j++)
             {
-                result.values[i][j] -= a.values[i][j];
+                result.SetValue(i, j, result.GetValue(i, j) - a.GetValue(i, j));
             }
         }
 
@@ -253,7 +254,7 @@ public:
         {
             for (int j = 0; j < size; j++)
             {
-                values[i][j] = a * values[i][j];
+                SetValue(i, j, a * GetValue(i, j));
             }
         }
 
@@ -273,10 +274,10 @@ public:
         {
             for (int j = 0; j < size; j++)
             {
-                result.values[i][j] = 0;
+                result.SetValue(i, j, 0);
                 for (int k = 0; k < size; k++)
                 {
-                    result.values[i][j] += values[i][k] * a.values[k][j];
+                    result.SetValue(i, j, GetValue(i, k) * a.GetValue(k, j));
                 }
             }
         }
@@ -295,7 +296,7 @@ public:
         {
             for (int j = 0; j < size; j++)
             {
-                values[i][j] = a.values[i][j];
+                SetValue(i, j, a.GetValue(i, j));
             }
         }
 
@@ -329,7 +330,7 @@ public:
 template <typename T>
 Matrix<T> operator-(T a, Matrix<T> b)
 {
-    return ((Matrix<T>(b.size) * a) - b);
+    return ((Matrix<T>(b.GetSize()) * a) - b);
 }
 
 template <typename T>
@@ -339,7 +340,8 @@ Matrix<T> operator*(T a, Matrix<T> b)
     {
         for (int j = 0; j < b.size; j++)
         {
-            b.values[i][j] = a * b.values[i][j];
+            //b.values[i][j] = a * b.values[i][j];
+            b.SetValue(i, j, a * b.GetValue(i, j));
         }
     }
 
@@ -353,7 +355,7 @@ ostream &operator<<(ostream &out, const Matrix<T> &matrix)
     {
         for (int j = 0; j < matrix.size; j++)
         {
-            out << matrix.values[i][j] << " ";
+            out << matrix.GetValue(i, j) << " ";
         }
         out << endl;
     }
@@ -372,7 +374,10 @@ istream &operator>>(std::istream &in, Matrix<T> &matrix)
     {
         for (int j = 0; j < matrix.size; j++)
         {
-            in >> matrix.values[i][j];
+            // in >> matrix.values[i][j];
+            T temp;
+            in >> temp;
+            matrix.SetValue(i, j, temp);
         }
     }
     return in;
@@ -388,36 +393,35 @@ int main()
         cout << excptn << endl;
     }
 
-    // cout << "1)" << endl;
-    // cin >> y;
-    // cout << y << endl; //1
-    // //x.Print();
+    cout << "1)" << endl;
+    cin >> y;
+    cout << y << endl; //1
 
-    // cout << "2) " << y.Value(0, 0) << endl
-    //      << endl; //2
+    cout << "2) " << y.GetValue(0, 0) << endl
+         << endl; //2
 
-    // Matrix<int> z(3), w(3);
-    // z = z * 4;
-    // w = w * 2;
-    // z /= w; //3
-    // cout << "3)" << endl
-    //      << z << endl;
+    cout << "3)" << endl;
+    Matrix<int> z(3), w(3);
+    z = z * 4;
+    w = w * 2;
+    z /= w; //3
+    cout << z << endl;
 
-    // Matrix<float> a(3), b(3);
-    // cout << "4)" << endl
-    //      << (--a) << endl
-    //      << (b--) << endl; //4
+    Matrix<float> a(3), b(3);
+    cout << "4)" << endl
+         << (--a) << endl
+         << (b--) << endl; //4
 
-    // cout << "5) " << (x <= a) << endl
-    //      << endl; //5
+    cout << "5) " << (x <= a) << endl
+         << endl; //5
 
-    // cout << "6)" << endl
-    //      << (x - 2) << endl; //6
-    // cout << ((float)2 - x) << endl;
+    cout << "6)" << endl
+         << (x - 2) << endl; //6
+    cout << ((float)2 - x) << endl;
 
-    // cout << "7)" << endl
-    //      << a << endl;
-    // a = x;
-    // cout << endl
-    //      << a << endl;
+    cout << "7)" << endl
+         << a << endl;
+    a = x;
+    cout << endl
+         << a << endl;
 }

@@ -424,4 +424,21 @@ int main()
     a = x;
     cout << endl
          << a << endl;
+
+    cout << "Extra" << endl;
+    // set matrix as
+    // 1 3 3
+    // 1 4 3
+    // 1 3 4
+
+    Matrix<int> h;
+
+    cin >> h;
+
+    cout << h.Inverse();
+
+    // result should be
+    // 7 -3 -3
+    // -1 1 0
+    // -1 0 1
 }

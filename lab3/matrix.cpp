@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 
@@ -28,7 +28,6 @@ public:
         }
     }
 
-public:
     Matrix() //size = 10; generating identity matrix
     {
         size = 10;
@@ -79,7 +78,6 @@ public:
     {
     }
 
-public:
     float Value(int x, int y)
     {
         if ((x < size) & (y < size) & (x >= 0) & (y >= 0))
@@ -315,7 +313,7 @@ public:
     }
 
     friend ostream &operator<<(ostream &out, const Matrix &matrix);
-    friend istream &operator>>(std::istream &in, Matrix &matrix);
+    friend istream &operator>>(istream &in, Matrix &matrix);
 };
 
 Matrix operator-(float a, Matrix b)

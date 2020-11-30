@@ -1,14 +1,26 @@
 #include <iostream>
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 
+//exp >= 0, specifically for matrix calc
+template <typename T>
+T powInt(const T base, const int exp) {
+    T result = 1;
+    for (int i = 0; i < exp; i++) {
+        result *= base;
+    }
+
+    return result;
+}
+
+template <typename T>
 class Matrix
 {
 public:
     int size;
-    vector<vector<float>> values;
+    vector<vector<T>> values;
 
     void AssignIdentityMatrix()
     {
@@ -28,11 +40,10 @@ public:
         }
     }
 
-public:
     Matrix() //size = 10; generating identity matrix
     {
         size = 10;
-        values = vector<vector<float>>(size, vector<float>(size));
+        values = vector<vector<T>>(size, vector<T>(size));
 
         AssignIdentityMatrix();
     }
@@ -40,7 +51,7 @@ public:
     Matrix(int _size) //size as parameter; generating identity matrix
     {
         size = _size;
-        values = vector<vector<float>>(size, vector<float>(size));
+        values = vector<vector<T>>(size, vector<T>(size));
 
         AssignIdentityMatrix();
     }
@@ -48,7 +59,7 @@ public:
     Matrix(const Matrix &_matrix) //copying constructor
     {
         size = _matrix.size;
-        values = vector<vector<float>>(size, vector<float>(size));
+        values = vector<vector<T>>(size, vector<T>(size));
 
         for (int i = 0; i < size; i++)
         {
@@ -62,7 +73,7 @@ public:
     Matrix(const Matrix &_matrix, int x, int y) //copying constructor specifically for determinant calc
     {
         size = _matrix.size - 1;
-        values = vector<vector<float>>(size, vector<float>(size));
+        values = vector<vector<T>>(size, vector<T>(size));
 
         for (int i = 0; i < size; i++)
         {
@@ -79,8 +90,7 @@ public:
     {
     }
 
-public:
-    float Value(int x, int y)
+    T Value(int x, int y)
     {
         if ((x < size) & (y < size) & (x >= 0) & (y >= 0))
         {
@@ -88,8 +98,7 @@ public:
         }
         else
         {
-            cout << "ERROR: id out of bounds" << endl;
-            return 0;
+            throw "ERROR: id out of bounds";
         }
     }
 
@@ -106,12 +115,11 @@ public:
         cout << endl;
     }
 
-    float Determinant()
+    T Determinant()
     {
         if (size < 1)
         {
-            cout << "ERROR: bad input matrix for determinant" << endl;
-            return 0;
+            throw "ERROR: bad input matrix for determinant";
         }
         if (size == 1)
         {
@@ -123,10 +131,10 @@ public:
         }
         else
         {
-            float result = 0;
+            T result = 0;
             for (int i = 0; i < size; i++)
             {
-                result += pow(-1, i + 0) * values[i][0] * Matrix(*this, i, 0).Determinant();
+                result += powInt((T)-1, i) * values[i][0] * Matrix(*this, i, 0).Determinant();
             }
             return result;
         }
@@ -196,24 +204,90 @@ public:
         }
     }
 
-    friend Matrix operator--(Matrix a); //--matrix
+    Matrix &operator--() //--matrix
+    {
+        for (int i = 0; i < size; i++)
+        {
+            values[i][i]--;
+        }
 
-    friend Matrix operator--(Matrix &a, int x); //matrix--
+        return *this;
+    }
 
-    friend Matrix operator-(Matrix a, const Matrix &b);
+    Matrix operator--(int) //matrix--
+    {
 
-    friend Matrix operator-(Matrix a, float b);
+        Matrix temp(*this);
+        operator--();
+        return temp;
+    }
 
-    friend Matrix operator*(Matrix, float);
+    Matrix operator-(const Matrix &a)
+    {
+        if (size != a.size)
+        {
+            throw "ERROR: subtraction of matrices of different size";
+        }
 
-    friend Matrix operator*(Matrix, const Matrix &);
+        Matrix result(*this);
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                result.values[i][j] -= a.values[i][j];
+            }
+        }
+
+        return result;
+    }
+
+    Matrix operator-(T a)
+    {
+        return *this - Matrix(size) * a;
+    }
+
+    Matrix operator*(T a)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                values[i][j] = a * values[i][j];
+            }
+        }
+
+        return *this;
+    }
+
+    Matrix operator*(const Matrix &a)
+    {
+        if (size != a.size)
+        {
+            throw "ERROR: multiplied matrix size differs";
+        }
+
+        Matrix result(size);
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                result.values[i][j] = 0;
+                for (int k = 0; k < size; k++)
+                {
+                    result.values[i][j] += values[i][k] * a.values[k][j];
+                }
+            }
+        }
+
+        return result;
+    }
 
     Matrix &operator=(const Matrix &a) // matrix = matrix2
     {
         if (this == &a) //check matrix = matrix
-        {
             return *this;
-        }
 
         size = a.size;
 
@@ -228,108 +302,38 @@ public:
         return *this;
     }
 
-    friend Matrix operator/=(const Matrix &, Matrix);
+    Matrix operator/=(Matrix a)
+    { //division is basically multiplying with inverse
+        *this = *this * a.Inverse();
+        return (*this * a.Inverse());
+    }
 
-    friend bool operator<=(Matrix, Matrix);
+    bool operator<=(Matrix a)
+    {
+        if (Determinant() <= a.Determinant())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-    friend ostream &operator<<(ostream &out, const Matrix &matrix);
-
-    friend istream &operator>>(std::istream &in, Matrix &matrix);
-
-    friend Matrix Stuff();
+    template <typename U>
+    friend ostream &operator<<(ostream &out, const Matrix<U> &matrix);
+    template <typename U>
+    friend istream &operator>>(istream &in, Matrix<U> &matrix);
 };
 
-Matrix operator--(Matrix a) //--matrix
+template <typename T>
+Matrix<T> operator-(T a, Matrix<T> b)
 {
-    for (int i = 0; i < a.size; i++)
-    {
-        a.values[i][i]--;
-    }
-
-    return a;
+    return ((Matrix<T>(b.size) * a) - b);
 }
 
-Matrix operator--(Matrix &a, int x) //matrix--
-{
-    Matrix temp(a);
-    --a;
-    return temp;
-}
-
-Matrix operator-(Matrix a, const Matrix &b)
-{
-    if (a.size != b.size)
-    {
-        cout << "ERROR: subtraction of matrices of different size" << endl;
-        return a;
-    }
-
-    for (int i = 0; i < a.size; i++)
-    {
-        for (int j = 0; j < a.size; j++)
-        {
-            a.values[i][j] -= b.values[i][j];
-        }
-    }
-
-    return a;
-}
-
-Matrix operator-(Matrix a, float b)
-{
-    return a - Matrix(a.size) * b;
-}
-
-Matrix operator-(float a, Matrix b) //
-{
-    return ((Matrix(b.size) * a) - b);
-}
-
-Matrix operator/=(Matrix &a, Matrix b)
-{ //division is basically multiplying with inverse
-    a = a * b.Inverse();
-    return a * b.Inverse();
-}
-
-Matrix operator*(Matrix a, const Matrix &b)
-{
-    if (a.size != b.size)
-    {
-        cout << "ERROR: multiplied matrix size differs" << endl;
-        return a;
-    }
-
-    Matrix result(a.size);
-
-    for (int i = 0; i < a.size; i++)
-    {
-        for (int j = 0; j < a.size; j++)
-        {
-            result.values[i][j] = 0;
-            for (int k = 0; k < a.size; k++)
-            {
-                result.values[i][j] += a.values[i][k] * b.values[k][j];
-            }
-        }
-    }
-
-    return result;
-}
-
-Matrix operator*(Matrix a, float b)
-{
-    for (int i = 0; i < a.size; i++)
-    {
-        for (int j = 0; j < a.size; j++)
-        {
-            a.values[i][j] = b * a.values[i][j];
-        }
-    }
-
-    return a;
-}
-
-Matrix operator*(float a, Matrix b)
+template <typename T>
+Matrix<T> operator*(T a, Matrix<T> b)
 {
     for (int i = 0; i < b.size; i++)
     {
@@ -342,19 +346,8 @@ Matrix operator*(float a, Matrix b)
     return b;
 }
 
-bool operator<=(Matrix a, Matrix b)
-{
-    if (a.Determinant() <= b.Determinant())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-ostream &operator<<(ostream &out, const Matrix &matrix)
+template <typename T>
+ostream &operator<<(ostream &out, const Matrix<T> &matrix)
 {
     for (int i = 0; i < matrix.size; i++)
     {
@@ -368,7 +361,8 @@ ostream &operator<<(ostream &out, const Matrix &matrix)
     return out;
 }
 
-istream &operator>>(std::istream &in, Matrix &matrix)
+template <typename T>
+istream &operator>>(std::istream &in, Matrix<T> &matrix)
 {
     cout << "Size: ";
     in >> matrix.size;
@@ -386,39 +380,44 @@ istream &operator>>(std::istream &in, Matrix &matrix)
 
 int main()
 {
-    Matrix x(3), y(3);
-    x = x * 2;
+    Matrix<float> x(3), y(2);
 
-    cout << "1)" << endl;
-    cin >> y;
-    cout << y << endl; //1
-    //y.Print();
+    try {
+        x = x * y;
+    } catch (const char *excptn) {
+        cout << excptn << endl;
+    }
 
-    cout << "2) " << y.Value(0, 0) << endl
-         << endl; //2
+    // cout << "1)" << endl;
+    // cin >> y;
+    // cout << y << endl; //1
+    // //x.Print();
 
-    Matrix z(3), w(3);
-    z = z * 3;
-    w = w * 2;
-    z /= w; //3
-    cout << "3)" << endl
-         << z << endl;
+    // cout << "2) " << y.Value(0, 0) << endl
+    //      << endl; //2
 
-    Matrix a(3), b(3);
-    cout << "4)" << endl
-         << (--a) << endl
-         << (b--) << endl; //4
+    // Matrix<int> z(3), w(3);
+    // z = z * 4;
+    // w = w * 2;
+    // z /= w; //3
+    // cout << "3)" << endl
+    //      << z << endl;
 
-    cout << "5) " << (x <= a) << endl
-         << endl; //5
+    // Matrix<float> a(3), b(3);
+    // cout << "4)" << endl
+    //      << (--a) << endl
+    //      << (b--) << endl; //4
 
-    cout << "6)" << endl
-         << (x - 2) << endl; //6
-    cout << (2 - x) << endl;
+    // cout << "5) " << (x <= a) << endl
+    //      << endl; //5
 
-    cout << "7)" << endl
-         << a << endl;
-    a = x;
-    cout << endl
-         << a << endl;
+    // cout << "6)" << endl
+    //      << (x - 2) << endl; //6
+    // cout << ((float)2 - x) << endl;
+
+    // cout << "7)" << endl
+    //      << a << endl;
+    // a = x;
+    // cout << endl
+    //      << a << endl;
 }

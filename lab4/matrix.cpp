@@ -385,45 +385,54 @@ istream &operator>>(std::istream &in, Matrix<T> &matrix)
 
 int main()
 {
-    Matrix<float> x(3), y(2);
+    // Matrix<float> x(3), y(2);
 
-    try {
-        x = x * y;
-    } catch (const char *excptn) {
-        cout << excptn << endl;
-    }
+    // try {
+    //     x = x * y;
+    // } catch (const char *excptn) {
+    //     cout << excptn << endl;
+    // }
 
-    cout << "1)" << endl;
-    cin >> y;
-    cout << y << endl; //1
+    // Matrix<int> a(3);
+    // Matrix<float> b(3);
 
-    cout << "2) " << y.GetValue(0, 0) << endl
-         << endl; //2
+    // a = a * 1.5;
+    // b = b * 1.5;
 
-    cout << "3)" << endl;
-    Matrix<int> z(3), w(3);
-    z = z * 4;
-    w = w * 2;
-    z /= w; //3
-    cout << z << endl;
+    // cout << a.Determinant() << endl;
+    // cout << b.Determinant() << endl;
 
-    Matrix<float> a(3), b(3);
-    cout << "4)" << endl
-         << (--a) << endl
-         << (b--) << endl; //4
+    // cout << "1)" << endl;
+    // cin >> y;
+    // cout << y << endl; //1
 
-    cout << "5) " << (x <= a) << endl
-         << endl; //5
+    // cout << "2) " << y.GetValue(0, 0) << endl
+    //      << endl; //2
 
-    cout << "6)" << endl
-         << (x - 2) << endl; //6
-    cout << ((float)2 - x) << endl;
+    // cout << "3)" << endl;
+    // Matrix<int> z(3), w(3);
+    // z = z * 4;
+    // w = w * 2;
+    // z /= w; //3
+    // cout << z << endl;
 
-    cout << "7)" << endl
-         << a << endl;
-    a = x;
-    cout << endl
-         << a << endl;
+    // Matrix<float> a(3), b(3);
+    // cout << "4)" << endl
+    //      << (--a) << endl
+    //      << (b--) << endl; //4
+
+    // cout << "5) " << (x <= a) << endl
+    //      << endl; //5
+
+    // cout << "6)" << endl
+    //      << (x - 2) << endl; //6
+    // cout << ((float)2 - x) << endl;
+
+    // cout << "7)" << endl
+    //      << a << endl;
+    // a = x;
+    // cout << endl
+    //      << a << endl;
 
     cout << "Extra" << endl;
     // set matrix as
